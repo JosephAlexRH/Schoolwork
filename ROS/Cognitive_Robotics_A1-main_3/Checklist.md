@@ -1,0 +1,49 @@
+
+- [ ] Navigation Environment \[15 Marks\]
+	- [ ] Gazebo World \[5 Marks]
+		- [x] Implementation
+		- [ ] Report documentation
+	- [ ] Gazebo Launch File \[5 Marks]
+		- [x] Implementation
+		- [ ] Report documentation
+	- [ ] SLAM \[5 marks]
+		- [x] SLAM finished
+		- [ ] Report documentation
+	- [ ] Launch, config (maps, RViz) \[2 Marks]
+		- [x] Correct place in file structure
+		- [ ] Report documentation
+
+- [ ] Shortest Path \[40 marks]
+	- [ ] Standard A* implementation \[5 marks]
+		- [x] Implementation
+		- [ ] Report documentation
+	- [ ] Turn penalties in cost function \[5 marks]
+		- [x] Implementation
+		- [ ] Report documentation
+	- [ ] Time in cost function \[5 marks]
+		- [ ] Implementation
+		- [ ] Report documentation
+	- [ ] Line of sight smoothing \[10 marks]
+		- [ ] Implementation
+		- [ ] Report documentation
+	- [ ] Launch file for path planning \[6 marks]
+		- [x] Implementation
+		- [ ] Report documentation
+	- [ ] make_plan function \[6 marks]
+		- [ ] Implementation
+		- [ ] Report documentation
+	- [ ] GridViz
+		- [x] Implementation
+		- [ ] Report documentation
+
+- [ ]  Performance Evaluation \[35 marks]
+	- [ ] Path length \[2 marks]
+		- [ ] Implementation
+		- [ ] Report documentation
+	- [ ] Computation time \[2 marks]
+		- [ ] Implementation
+		- [ ] Report documentation
+	- [ ] Travel time \[3 marks]
+		- [ ] Implementation
+		- [ ] Report documentation
+	- [ ] Report Questions \[4 marks per question, 28 total]

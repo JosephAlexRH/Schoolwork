@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/rosoperator/new_folder/Cognitive_Robotics_A1-main_3/assessment1_ws/devel/include/**",
+        "/home/rosoperator/new_folder/Cognitive_Robotics_A1-main_3/assessment1_ws/src/srv_client_plugin/include/**",
+        "/home/rosoperator/catkin_ws_class1/src/turtlebot3_simulations/turtlebot3_fake/include/**",
+        "/home/rosoperator/catkin_ws_class1/src/turtlebot3_simulations/turtlebot3_gazebo/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
