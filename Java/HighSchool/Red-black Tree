@@ -1,0 +1,176 @@
+/**
+ * RBT
+ * Red-Black Tree Insert
+ * @author Joseph Russell
+ */
+import java.util.*;
+public class RBT {
+    public Node root;
+
+    public RBT() {}
+
+    public boolean isRed(Node x) {
+        if (x == null) return false;
+        return x.getColor() == Node.Color.RED;
+    }
+
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    public boolean contains(int x) {
+        return nodeContainsData(root, x);
+    }
+
+    private boolean nodeContainsData(Node r, int x) {
+        while (r != null) {
+            if (r.getData() - x < 0) {
+                r = r.getLeft();
+            } else if (r.getData() - x > 0) {
+                r = r.getRight();
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Integer> serializeTree() {
+        return serializeTree(root);
+    }
+
+    private List<Integer> serializeTree(Node r) {
+        if (r == null) return new LinkedList<>();
+        int data = r.getData();
+        List<Integer> left = serializeTree(r.getLeft());
+        List<Integer> right = serializeTree(r.getRight());
+        left.add(data);
+        left.addAll(right);
+        return left;
+    }
+
+    public int maxHeight() {
+        return maxHeight(root);
+    }
+
+    private int maxHeight(Node r) {
+        if (r==null) return 0;
+        return 1 + Math.max(maxHeight(r.getLeft()), maxHeight(r.getRight()));
+    }
+
+
+
+
+    // ************************************************************************
+    // * INSERT INTO RED-BLACK TREE
+    // ************************************************************************
+
+    /**
+     * Method to insert a value into the Red-black tree.
+     * Calls on a recursive method to perform the actual insertion and
+     * ensures the root is black
+     * @param x the value to be inserted into the tree
+     */
+    public void insert(int x) {
+        root = nodeInsertData(root, x);
+        root.setColor(Node.Color.BLACK);
+    }
+
+    /**
+     * Inserts a new node with its data variable set to x into the Red-black tree.
+     * If a node with the same data value as x is found, it updates the nodes value.
+     * Checks for violations to the red-black tree and fixes them by rotating right,
+     * rotating left or flipping its color and their children on node r.
+     *
+     * @param r The current node to be inserted into the Red-black tree
+     * @param x The data value of the r Node
+     * @return The node after insertion or update into the Red-black tree
+     */
+    private Node nodeInsertData(Node r, int x) {
+        //If node inserted is null
+        if (r == null) return new Node(x, Node.Color.RED);
+        //Recursively insert the Node on either the left or right subtree, update the Node if the value already exists within it
+        int dif = x - r.getData();
+        if (dif < 0) {
+            r.setLeft(nodeInsertData(r.getLeft(), x));
+        }
+        else if (dif > 0) {
+            r.setRight(nodeInsertData(r.getRight(), x));
+        }
+        else r.setData(x);
+
+        //Check and fix any violations in the Red-black tree
+        if (isRed(r.getRight()) && !isRed(r.getLeft())) {
+            r = rotateLeft(r);
+        }
+        if (isRed(r.getLeft()) && isRed(r.getLeft().getLeft())){
+            r = rotateRight(r);
+        }
+        if (isRed(r.getLeft()) && isRed(r.getRight())){
+            flipColors(r);
+        }
+
+        return r;
+    }
+
+    /**
+     * Perform a right rotation on the given Node (h).
+     * The left child of node h becomes the new parent, and node h
+     * becomes the right parent of this new parent. The node colors
+     * The colors of the nodes are then adjusted accordingly.
+     *
+     * @param h The current node around which the rotation is made
+     * @return The new parent node after the rotation has been done
+     */
+    private Node rotateRight(Node h) {
+        if (h == null || h.getLeft() == null) {
+            return h;
+        }
+        Node x = h.getLeft();
+
+        h.setLeft(x.getRight());
+        x.setRight(h);
+        x.setColor(x.getRight().getColor());
+        x.getRight().setColor(Node.Color.RED);
+        return x;
+    }
+
+    /**
+     * Performs left rotation on given Node (h)
+     * The right child of node h becomes the new parent, node h
+     * becomes the left child of the new parent Node.
+     * The colors are changed to follow Red-black tree restrictions
+     * @param h The current node which the left rotation is to be performed on
+     * @return The new parent node after rotation
+     */
+    private Node rotateLeft(Node h) {
+        if (h == null || h.getRight() == null) {
+            return h;
+        }
+        Node x = h.getRight();
+        h.setRight(x.getLeft());
+        x.setLeft(h);
+        x.setColor(x.getLeft().getColor());
+        x.getLeft().setColor(Node.Color.RED);
+        return x;
+    }
+
+    /**
+     * Flip the colors of the current node and its immediate children,
+     * this is used when both children of a node are red and the node
+     * itself is black. It flips the color of the node to red and
+     * both its children to black, helping maintain red-black tree
+     * properties
+     * @param h The current node which it and its children's colors will be
+     *          flipped
+     */
+    private void flipColors(Node h) {
+        if (h == null) {
+            return;
+        }
+        h.setColor(h.getColor() == Node.Color.RED ? Node.Color.BLACK : Node.Color.RED);
+        h.getLeft().setColor(h.getLeft().getColor() == Node.Color.RED ? Node.Color.BLACK : Node.Color.RED);
+        h.getRight().setColor(h.getRight().getColor() == Node.Color.RED ? Node.Color.BLACK : Node.Color.RED);
+    }
+}
+

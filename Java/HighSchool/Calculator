@@ -1,0 +1,246 @@
+import java.awt.*;
+import javax.swing.*;
+import java.util.*;
+
+public class Calculator {
+    ArrayList<String>calculations;
+    JTextField displayField;
+    //Constructor for Calculator
+    public Calculator(){
+        createGUI();
+        calculations=new ArrayList<String>();
+        calculations.add("BUFFER");
+    }
+    //Initializes calculator panel, input screen and buttons
+    public void createGUI() {
+        JFrame frame = new JFrame("Calculator");
+        frame.setLayout(new BorderLayout());
+
+        JPanel displayPanel = new JPanel(new BorderLayout());
+        displayField = new JTextField();
+        displayField.setPreferredSize(new Dimension(200, 40));
+        displayPanel.add(displayField, BorderLayout.CENTER);
+        frame.add(displayPanel, BorderLayout.NORTH);
+        displayField.setEditable(false);
+        JPanel buttonPanel = new JPanel(new GridLayout(5, 4, 5, 5));
+        String[] buttonLabels = {"7", "8", "9", "÷", "4", "5", "6", "x", "1", "2", "3", "-", "AC", "0", "=", "+"};
+        for (String label : buttonLabels) {
+            JButton button = new JButton(label);
+            button.setName(label);
+            buttonPanel.add(button);
+            Functionality(button, displayField);
+        }
+        frame.add(buttonPanel, BorderLayout.CENTER);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        displayField.setText("0");
+    }
+    //Checks if the String str is an operator and returns true if it is
+    public boolean isArithmeticOperator(String str) {
+        return str.equals("+") || str.equals("-") || str.equals("x") || str.equals("÷");
+    }
+    //Converts the arraylist passed into the function into a string and returning the rest of the string after the first operator found in the array
+    public String toString(ArrayList<String> calc){
+        String temp="";
+        int lastOperator=1;
+        for(int i=calc.size()-1;i>=1;i--){
+            if(isArithmeticOperator(calc.get(i))){
+                lastOperator=i+1;
+                break;
+            }
+        }
+        for(int i=lastOperator;i<calc.size();i++){
+            temp+=calc.get(i);
+        }
+        return temp;
+    }
+    //Provides the functionality to the calculator and its buttons
+    public void Functionality(JButton button, JTextField displayField) {
+        String name= button.getName();
+        button.addActionListener(e -> {
+            if(name.equals("1")){
+                calculations.add("1");
+            displayField.setText(toString(calculations));
+            }
+            if(name.equals("2")){
+                calculations.add("2");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("3")){
+                calculations.add("3");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("4")){
+                calculations.add("4");
+                displayField.setText(toString(calculations));
+            } if(name.equals("5")){
+                calculations.add("5");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("6")){
+                calculations.add("6");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("7")){
+                calculations.add("7");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("8")){
+                calculations.add("8");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("9")){
+                calculations.add("9");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("0")){
+                calculations.add("0");
+                displayField.setText(toString(calculations));
+            }
+            if(name.equals("AC")){
+                displayField.setText("0");
+                calculations.clear();
+                calculations.add("BUFFER");
+            }
+            try {
+                if (name.equals("÷")) {
+
+                    if (!isArithmeticOperator(calculations.get(calculations.size() - 1))) {
+                        displayField.setText("÷");
+                        calculations.add("÷");
+                    } else {
+                        calculations.set(calculations.size() - 1, "÷");
+                        displayField.setText("÷");
+                    }
+                }
+                if (name.equals("+")) {
+
+                    if (!isArithmeticOperator(calculations.get(calculations.size() - 1))) {
+                        displayField.setText("+");
+                        calculations.add("+");
+                    } else {
+                        calculations.set(calculations.size() - 1, "+");
+                        displayField.setText("+");
+                    }
+                }
+                if (name.equals("-")) {
+
+                    if (!isArithmeticOperator(calculations.get(calculations.size() - 1))) {
+                        displayField.setText("-");
+                        calculations.add("-");
+                    } else {
+                        calculations.set(calculations.size() - 1, "-");
+                        displayField.setText("-");
+                    }
+                }
+                if (name.equals("x")) {
+                    if (!isArithmeticOperator(calculations.get(calculations.size() - 1))) {
+                        displayField.setText("x");
+                        calculations.add("x");
+                    } else {
+                        calculations.set(calculations.size() - 1, "x");
+                        displayField.setText("x");
+                    }
+                }
+            }
+            catch (ArrayIndexOutOfBoundsException exception){
+                System.out.println("Array out of bounds, calculation arraylist error.");
+            }
+            if(name.equals("=")){
+                int lastIndex = calculations.size() - 1;
+                if (isArithmeticOperator(calculations.get(lastIndex))) {
+                    calculations.remove(lastIndex);
+                }
+                for (int i=1;i<calculations.size();i++){
+                    System.out.print(calculations.get(i));
+                }
+                System.out.println();
+                priority(calculations);
+                calculations.clear();
+                calculations.add("BUFFER");
+
+            }
+        });
+    }
+    //First part of classes calculation functionality in charge of multiplication and division to keep order of operations
+    public void priority(ArrayList<String> calculations){
+        ArrayList<String> temp=calculations;
+        double result=0;
+        if(calculations.contains("x")||calculations.contains("÷")){
+            for(int i=1;i<calculations.size();i++){
+                if(calculations.get(i).equals("x")){
+                    double forward= Double.parseDouble(calculations.get(i-1));
+                    double backward=Double.parseDouble(calculations.get(i+1));
+                    result=forward*backward;
+                    temp.set(i, String.valueOf(result));
+                    temp.remove(i+1);
+                    temp.remove(i-1);
+                    priority(temp);
+                }
+                if(calculations.get(i).equals("÷")){
+                    double forward= Double.parseDouble(calculations.get(i-1));
+                    double backward=Double.parseDouble(calculations.get(i+1));
+                    result=forward/backward;
+                    temp.set(i, String.valueOf(result));
+                    temp.remove(i+1);
+                    temp.remove(i-1);
+                    priority(temp);
+                }
+            }
+        }
+        else{
+            performOperation(temp, displayField);
+        }
+    }
+    //Second part of classes calculation functionality in charge of sum and subtraction
+    public void performOperation(ArrayList<String> calculations, JTextField displayField) {
+        double result = 0;
+        String operator = "";
+        boolean divideByZero = false;
+
+        for (int i = 1; i < calculations.size(); i++) {
+            String token = calculations.get(i);
+            if (token.equals("BUFFER")) {
+                token = calculations.get(i + 1);
+            }
+            if (token.matches("[+\\-x÷]")) {
+                operator = token;
+            } else {
+                double operand = Double.parseDouble(token);
+
+                switch (operator) {
+                    case "+":
+                        result += operand;
+                        break;
+                    case "-":
+                        result -= operand;
+                        break;
+                    case "x":
+                        result *= operand;
+                        break;
+                    case "÷":
+                        if (operand == 0) {
+                            divideByZero = true;
+                        } else {
+                            result /= operand;
+                        }
+                        break;
+                    default:
+                        result = operand;
+                }
+            }
+            System.out.println(result);
+        }
+
+        if (divideByZero) {
+            displayField.setText("Error: Divide by zero");
+        } else {
+            displayField.setText(Double.toString(result));
+        }
+    }
+    public static void main(String[] args) {
+        Calculator calc=new Calculator();
+    }
+}
